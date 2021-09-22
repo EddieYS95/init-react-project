@@ -1,12 +1,17 @@
 import React from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
-import Home from './pages';
+import { Provider } from 'react-redux';
+
+import store from '@modules/store';
+import Home from '@pages/index';
 
 const App: React.FC = () => {
   return (
-    <Router>
-      <Route exact path="/" component={Home} />
-    </Router>
+    <Provider store={store}>
+      <Router>
+        <Route exact path="/" component={Home} />
+      </Router>
+    </Provider>
   );
 };
 
