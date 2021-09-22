@@ -1,5 +1,5 @@
 import axios, { AxiosResponse } from 'axios';
-import useSWR, { SWRConfiguration } from 'swr';
+import useSWR, { SWRConfiguration, SWRResponse } from 'swr';
 
 export const api = axios.create({ baseURL: process.env.REACT_APP_API_PATH });
 
@@ -9,12 +9,13 @@ interface ResponseData<D> {
 
 interface Response<Data> {
   data?: Data;
+  response: SWRResponse<ResponseData<Data>, Error>;
 }
 
 export const request = {
   get: function get<D>(url: string, arg?: SWRConfiguration): Response<D> {
-    const response = useSWR<ResponseData<D>>(url, api.get, arg);
-    return { data: response.data?.data };
+    const { data, ...response } = useSWR<ResponseData<D>>(url, api.get, arg);
+    return { data: data?.data, response };
   },
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   post: async function post<D, Body = any>(url: string, body?: Body): Promise<AxiosResponse<D>> {
